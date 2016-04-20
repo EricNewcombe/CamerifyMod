@@ -43,7 +43,7 @@ public class CameraPathHandler {
 		return new float[2];
 	}
 	
-	private static void tick() {
+	public static void tick() {
 		// TODO write the logic to update camera at every tick
 	}
 	
