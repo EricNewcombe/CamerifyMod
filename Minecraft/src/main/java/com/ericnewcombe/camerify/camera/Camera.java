@@ -13,13 +13,10 @@ public class Camera {
 	
 	private static Camera instance = null;
 	
-	private boolean travelling;
 	private static ArrayList<CameraPoint> path;
 	
 	private Camera() {
-		
-		this.travelling = false;
-		this.path = new ArrayList<CameraPoint>();
+		path = new ArrayList<CameraPoint>();
 		
 	}
 	
@@ -70,9 +67,7 @@ public class Camera {
 		
 	}
 	
-	public int getSize() {
-		return path.size();
-	}
+	
 	
 	public String[] getPathString() {
 		
@@ -86,24 +81,10 @@ public class Camera {
 		
 	}
 	
-}
-
-/*
- * Represents a position in the minecraft world with x,y,z coords and pitch and roll
- */
-class CameraPoint {
+	public int getSize() { return path.size(); }
+	public CameraPoint getPoint( int i ) { return path.get(i); }
+	public String getPointString (int i ) { return path.get(i).toString(); }
+	public ArrayList<CameraPoint> getPath() { return path; }
 	
-	public double x, y, z;
-	public float camPitch, camYaw;
-	
-	public CameraPoint( double x, double y, double z, float camPitch, float camYaw  ){
-		this.x = x;
-		this.y = y;
-		this.z = z;
-		this.camPitch = camPitch;
-		this.camYaw = camYaw;
-	}
-	
-	public String toString() { return "x: " + (int)x + " y: " + (int)y + " z: " + (int)z; }
-	
+	public void removePoint( int i ) { path.remove(i); }
 }
