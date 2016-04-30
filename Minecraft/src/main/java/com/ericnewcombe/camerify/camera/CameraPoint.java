@@ -17,5 +17,12 @@ public class CameraPoint {
 	}
 	
 	public String toString() { return "x: " + (int)x + " y: " + (int)y + " z: " + (int)z; }
+
+	public boolean equals( CameraPoint p ) {
+		if ( p.x == x && p.y == y && p.z == z ) { return true; }
+		return false;
+	}
+
+	
 	
 }

@@ -9,29 +9,34 @@ public class CameraPathHandler {
 	private static int currentFrame = 0;
 	private static int travelTime = 200;
 	
-	public static void startTravel() {
+	public static boolean startTravel() {
 		
 		camera = Camera.getInstance();
 		
 		if ( camera.getSize() == 0 ) {
 			ChatHandler.sendMessage("No points to travel.");
+			return false;
 		}
 		if ( !moving ) {
 			ChatHandler.sendMessage("Travelling started!");
 			moving = true;
 			currentFrame = 0;
+			return true;
 		}
 		else {
 			ChatHandler.sendMessage("Already travelling.");
+			return false;
 		}
 		
 	}
 	
-	public static void endTravel() {
+	public static boolean endTravel() {
 		if ( moving ) {
 			ChatHandler.sendMessage("Travelling ended.");
 			moving = false;
+			return true; // Success
 		}
+		return false; // Not moving
 	}
 	
 	private static void calculatePositionInPath ( int time ) {

@@ -14,7 +14,9 @@ public class ChatHandler {
 	private static final Minecraft mc = Minecraft.getMinecraft();
 	
 	public static void sendMessage( String msg ) {
-		mc.thePlayer.addChatMessage(new TextComponentString(PREFIX + msg));
+		if ( mc != null ) {
+			mc.thePlayer.addChatMessage(new TextComponentString(PREFIX + msg));
+		}
 	}
 	
 }

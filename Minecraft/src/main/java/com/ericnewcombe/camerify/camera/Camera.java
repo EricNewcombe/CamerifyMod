@@ -30,36 +30,43 @@ public class Camera {
 	}
 	
 	
-	public static void clearPath() {
+	public static boolean clearPath() {
 		path.clear();
 		ChatHandler.sendMessage("Camera cleared.");
+		return true; // TODO add logic to determine if the path can be cleared or not
 	}
 	
-	public static void addPoint( CameraPoint c ) {
+	public static boolean addPoint( CameraPoint c ) {
 		path.add(c);
 		ChatHandler.sendMessage("Point Registered. " + path.size() + " in queue.");
+		return true; // TODO add logic to determine if a point is valid or not
 	}
 	
-	public static void addPointAtPosition( CameraPoint c, int pos ) {
+	public static boolean addPointAtPosition( CameraPoint c, int pos ) {
 		
 		// Check to see if the intended position is in the scope of the number of points in the path already
-		int placedPosition = pos > path.size() - 1 || pos < 0 ? path.size() : pos;
+		if ( pos > path.size() - 1 || pos < 0 ) {
+			ChatHandler.sendMessage("Position out of scope of placed points.");
+			return false;
+		}
 		
 		// add the point to the position
-		path.add(placedPosition, c);
+		path.add(pos, c);
 		
-		ChatHandler.sendMessage("Point Registered. " + (placedPosition + 1) + " in queue");
+		ChatHandler.sendMessage("Point Registered. " + (pos + 1) + " in queue");
 		
+		return true; // TODO add logic to return false if out of bounds
 	}
 	
-	public void setPointAtPosition( CameraPoint c, int pos ) {
+	public static boolean setPointAtPosition( CameraPoint c, int pos ) {
 		
-		if ( pos > path.size() - 1 ) { return; }
+		if ( pos > path.size() - 1 || pos < 0 ) { return false; }
 		path.set(pos, c);
+		return true;
 		
 	}
 	
-	public void printPath() {
+	public static void printPath() {
 		
 		for ( int i = 0, l = path.size(); i < l; i++ ) {
 			System.out.println(path.get(i).toString());
@@ -69,7 +76,7 @@ public class Camera {
 	
 	
 	
-	public String[] getPathString() {
+	public static String[] getPathString() {
 		
 		String[] points = new String[path.size()];
 		
@@ -81,10 +88,14 @@ public class Camera {
 		
 	}
 	
-	public int getSize() { return path.size(); }
-	public CameraPoint getPoint( int i ) { return path.get(i); }
-	public String getPointString (int i ) { return path.get(i).toString(); }
-	public ArrayList<CameraPoint> getPath() { return path; }
+	public static int getSize() { return path.size(); }
+	public static CameraPoint getPoint( int i ) { return path.get(i); }
+	public static String getPointString (int i ) { return path.get(i).toString(); }
+	public static ArrayList<CameraPoint> getPath() { return path; }
 	
-	public void removePoint( int i ) { path.remove(i); }
+	public static boolean removePoint( int i ) { 
+		if ( i > path.size() - 1 || i < 0 ) { return false; }
+		path.remove(i);
+		return true;
+	}
 }

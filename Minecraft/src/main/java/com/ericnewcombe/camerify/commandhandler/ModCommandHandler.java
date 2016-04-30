@@ -83,7 +83,7 @@ public class ModCommandHandler implements ICommand {
 	    	CameraPathHandler.endTravel();
 	    }
 	    else if ( args[0].toLowerCase().equals("clear") ) {
-	    	Main.camPath.clearPath();
+	    	Camera.clearPath();
 	    }
 	}
 
