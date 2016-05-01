@@ -11,7 +11,7 @@ import com.ericnewcombe.camerify.chat.ChatHandler;
 
 public class Camera {
 	
-	private static Camera instance = null;
+	private static Camera instance = getInstance();
 	
 	private static ArrayList<CameraPoint> path;
 	

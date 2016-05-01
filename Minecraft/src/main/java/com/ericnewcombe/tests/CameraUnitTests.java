@@ -14,8 +14,6 @@ public class CameraUnitTests {
 	@Test
 	public void testCamera() {
 		
-		Camera.getInstance();
-		
 		// initialize camera points
 		CameraPoint a = new CameraPoint(50, 50, 50, 10, 10),
 					b = new CameraPoint(100, 45, 60, 60, 80),

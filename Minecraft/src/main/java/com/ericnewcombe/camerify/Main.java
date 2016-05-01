@@ -20,8 +20,6 @@ public class Main {
 	public static final String MODNAME = "Camerify Mod";
 	public static final String VERSION = "0.0.1";
 	
-	public static Camera camPath = Camera.getInstance();
-	
 	@Instance
 	public static Main instance = new Main();
 

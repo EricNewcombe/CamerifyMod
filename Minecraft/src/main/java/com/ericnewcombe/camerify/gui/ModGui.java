@@ -7,12 +7,12 @@ import java.util.Map;
 
 import org.lwjgl.input.Mouse;
 
-import com.ericnewcombe.camerify.Main;
+import com.ericnewcombe.camerify.camera.Camera;
+import com.ericnewcombe.camerify.camera.CameraPoint;
 import com.ericnewcombe.camerify.camera.gui.MenuButton;
 import com.ericnewcombe.camerify.camera.gui.MenuElement;
 import com.ericnewcombe.camerify.camera.gui.Screen;
 import com.ericnewcombe.camerify.camera.gui.ScrollList;
-import com.ericnewcombe.camerify.camera.CameraPoint;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -65,12 +65,32 @@ public class ModGui extends GuiScreen {
 	
 	@Override
 	public void drawScreen( int x, int y, float f ) {
-
+		
+		updateMousePosition();
+		displayHoverText();
+		displayVisibleElements();
+		
+		super.drawScreen(x, y, f);
+		
+	}
+	
+	/***
+	 * Retrieves the position of the mouse and updates the variables corresponding to its position
+	 */
+	
+	private void updateMousePosition() {
+		
 		this.mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth;
 		this.mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
 		this.xOffset = (this.width - 330) / 2;
 		
-		MenuElement.setXOffset(xOffset);
+	}
+	
+	/***
+	 * Displays the hover text on the screen which is retrieved from the hovered element
+	 */
+	
+	private void displayHoverText() {
 		
 		MenuElement hoverTextBox = activeScreen.getHoverTextBox();
 		String hoverText = getHoverText(mouseX, mouseY);
@@ -82,6 +102,13 @@ public class ModGui extends GuiScreen {
 			System.out.println("asdf");
 		}
 		
+	}
+	
+	/***
+	 * Finds and draws the active elements corresponding to the current screen
+	 */
+	
+	private void displayVisibleElements() {
 		
 		ArrayList<MenuElement> visibleElements = activeScreen.getVisibleElements();
 		
@@ -96,11 +123,16 @@ public class ModGui extends GuiScreen {
 			
 		}
 		
-		super.drawScreen(x, y, f);
-		
 	}
 	
+	/***
+	 * Retrieves the hover text (if any) from the element if its being hovered over
+	 * @param x - x position of the mouse
+	 * @param y - y position of the mouse
+	 * @return - the text to display of the element being hovered or an empty string
+	 */
 	private String getHoverText( int x, int y) {
+		
 		MenuElement hoveredElement = activeScreen.getElementContainingPoint(x, y);
 		
 		if ( hoveredElement == null ) { return ""; }
@@ -108,6 +140,7 @@ public class ModGui extends GuiScreen {
 		hoveredElement.setColor(hoveredElement.getHoverColor());
 		
 		return hoveredElement.getHoverText();
+		
 	}
 	
 	@Override
@@ -128,6 +161,7 @@ public class ModGui extends GuiScreen {
 	public void drawElement(MenuElement e) { drawRect(e.getLeft(), e.getTop(), e.getRight(), e.getBottom(), e.getColor()); }
 	public void drawText(MenuElement e) { drawCenteredString(fontRendererObj, e.getText(), e.getCenterX(), e.getCenterY() - 4, 0xffffff);}
 	
+	@Override
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
 		
 		
@@ -143,10 +177,12 @@ public class ModGui extends GuiScreen {
 		
 	}
 	
+	@Override
 	 protected void mouseReleased(int mouseX, int mouseY, int state) {
         Mouse.setGrabbed(false);
     }
 	 
+	@Override
 	protected void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
 		
 		if( clickedMouseButton == 1 && screenIndex == EDIT_POINT_SCREEN ) {
@@ -184,6 +220,12 @@ public class ModGui extends GuiScreen {
 		
 	}
 	
+	/***
+	 * Finds which menubutton was clicked then handles the click based on the id
+	 * @param mouseX - x position of the mouse where it was clicked
+	 * @param mouseY - y position of the mouse where it was clicked
+	 * @param mouseButton - Mouse button which was clicked
+	 */
 	private void checkElementClicked( int mouseX, int mouseY, int mouseButton ) {
 		
 		int buttonClicked = -1;
@@ -199,6 +241,11 @@ public class ModGui extends GuiScreen {
 		
 	}
 	
+	/***
+	 * Performs different actions based on which button was clicked
+	 * TODO create a GUI click handler class
+	 * @param buttonClicked - id of the button clicked
+	 */
 	private void handleClick( int buttonClicked ) {
 		EntityPlayer p = Minecraft.getMinecraft().thePlayer;
 		
@@ -235,7 +282,7 @@ public class ModGui extends GuiScreen {
 					clearPath();
 					break;
 				case 154: // Save point
-					Main.camPath.setPointAtPosition(new CameraPoint(p.posX, p.posY, p.posZ, p.rotationPitch, p.rotationYaw), pointSelected + pointList.getAmountScrolled());
+					Camera.setPointAtPosition(new CameraPoint(p.posX, p.posY, p.posZ, p.rotationPitch, p.rotationYaw), pointSelected + pointList.getAmountScrolled());
 					break;
 				case 155: // Return to options screen
 					setScreenAndSubscreen(OPTIONS_SCREEN, CAM_POINTS_SUBSCREEN);
@@ -283,12 +330,12 @@ public class ModGui extends GuiScreen {
 	}
 	
 	private void deleteSelectedPoint() {
-		if( Main.camPath.getSize() > 0 ){
-			Main.camPath.removePoint(this.pointSelected);
+		if(Camera.getSize() > 0 ){
+			Camera.removePoint(this.pointSelected);
 		}
 		updatePoints();
-		if ( Main.camPath.getSize() > 0 ) {
-			if ( this.pointSelected >= Main.camPath.getSize() - this.pointList.getAmountScrolled() || this.pointSelected > Main.camPath.getSize() - 1 ) {
+		if (Camera.getSize() > 0 ) {
+			if ( this.pointSelected >=Camera.getSize() - this.pointList.getAmountScrolled() || this.pointSelected > Camera.getSize() - 1 ) {
 				// If the point is greater than the number of elements or would be offscreen
 				pointList.scrollUp();
 				this.pointSelected -= 1;
@@ -301,7 +348,7 @@ public class ModGui extends GuiScreen {
 	
 	private void editSelectedPoint( EntityPlayer p ) {
 		// Go to point
-		CameraPoint edit = Main.camPath.getPoint(pointSelected);
+		CameraPoint edit = Camera.getPoint(pointSelected);
 		p.setPositionAndRotation(edit.x, edit.y, edit.z, edit.camYaw, edit.camPitch);
 		// Open edit point screen
 		activeScreen = screens.get(EDIT_POINT_SCREEN).getSubScreen(BLANK_SUBSCREEN);
@@ -311,10 +358,10 @@ public class ModGui extends GuiScreen {
 	
 	private void addPoint( EntityPlayer p ) {
 		pointSelected += 1;
-		if ( Main.camPath.getSize() == 0 ) {
+		if ( Camera.getSize() == 0 ) {
 			this.pointSelected = 0;
 		}
-		Main.camPath.addPointAtPosition(new CameraPoint(p.posX, p.posY, p.posZ, p.rotationPitch, p.rotationYaw), pointSelected);
+		Camera.addPointAtPosition(new CameraPoint(p.posX, p.posY, p.posZ, p.rotationPitch, p.rotationYaw), pointSelected);
 		updatePoints();
 		activeScreen.setElements(pointList.getVisibleElements());
 		this.pointList.selectElement(pointSelected, MENU_BUTTON_BACKGROUND, MENU_BUTTON_SELECTED);
@@ -322,7 +369,7 @@ public class ModGui extends GuiScreen {
 	}
 	
 	private void clearPath() {
-		Main.camPath.clearPath();
+		Camera.clearPath();
 		updatePoints();
 		this.pointSelected = 0;
 		screens.get(OPTIONS_SCREEN).getSubScreen(CAM_CONTROLS_SUBSCREEN);
@@ -337,6 +384,7 @@ public class ModGui extends GuiScreen {
 		this.screenIndex = sub;
 		activeScreen = screens.get(screenIndex).getSubScreen(subScreenIndex);
 	}
+	
 	// TODO have it import these from a file
 	
 	private void initializeElements() {
@@ -377,7 +425,7 @@ public class ModGui extends GuiScreen {
 		
 		editPoints.addSubScreen( new Screen() ); // Blank screen
 		
-		if(Main.camPath.getSize() > 0) {
+		if ( Camera.getSize() > 0 ) {
 			this.pointSelected = 0;
 			this.pointList.selectElement(pointSelected, MENU_BUTTON_BACKGROUND, MENU_BUTTON_SELECTED);
 		}
@@ -401,21 +449,21 @@ public class ModGui extends GuiScreen {
 		
 		
 		camPoints.addElement(addPointButton);
-		if( this.pointSelected >= 0 && Main.camPath.getSize() > 0 ) { 
+		if( this.pointSelected >= 0 && Camera.getSize() > 0 ) { 
 			// Show delete and edit buttons if a point is selected
 			camPoints.addElement(deletePointButton);
 			camPoints.addElement(editPointButton);
 		}
-		if( Main.camPath.getSize() > this.pointList.getNumVisible() ) {
+		if( Camera.getSize() > this.pointList.getNumVisible() ) {
 			// Add scroll controls if the number of cam points exceeds the number that there is room for on the lis
 			if (this.pointList.getAmountScrolled() > 0 ) {
 				camPoints.addElement(scrollUpButton);
 			}
-			if ( this.pointList.getAmountScrolled() < Main.camPath.getSize() - this.pointList.getNumVisible()) {
+			if ( this.pointList.getAmountScrolled() < Camera.getSize() - this.pointList.getNumVisible()) {
 				camPoints.addElement(scrollDownButton);
 			}			
 		}
-		if ( Main.camPath.getSize() > 0 ) {
+		if ( Camera.getSize() > 0 ) {
 			camPoints.addElement(clearButton);
 		}
 	}
@@ -424,8 +472,8 @@ public class ModGui extends GuiScreen {
 		// Get all the points in the camera path and create buttons for them
 		pointList.clearList();
 		MenuElement visiblePoint;
-		for( int i = 0, l = Main.camPath.getSize(); i < l; i++ ) {
-			visiblePoint = new MenuButton(1000 + i , 135, (i * 22) + 53, 190, 20, 0xff000000, Main.camPath.getPointString(i));
+		for( int i = 0, l = Camera.getSize(); i < l; i++ ) {
+			visiblePoint = new MenuButton(1000 + i , 135, (i * 22) + 53, 190, 20, 0xff000000, Camera.getPointString(i));
 			pointList.addElement(visiblePoint);
 		}
 	}
@@ -433,8 +481,8 @@ public class ModGui extends GuiScreen {
 	private void updatePoints() {
 		// Update the point positions based on the ones which are visible
 		pointList.clearList();
-		for( int i = 0, l = Main.camPath.getSize(); i < l; i++ ) {
-			pointList.addElement(new MenuButton(1000 + i, 135, (i * 22) - pointList.getAmountScrolled() * 22 + 53, 190, 20, 0xff000000, Main.camPath.getPointString(i)));
+		for( int i = 0, l = Camera.getSize(); i < l; i++ ) {
+			pointList.addElement(new MenuButton(1000 + i, 135, (i * 22) - pointList.getAmountScrolled() * 22 + 53, 190, 20, 0xff000000, Camera.getPointString(i)));
 		}
 	}
 	
