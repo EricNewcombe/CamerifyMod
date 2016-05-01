@@ -357,11 +357,19 @@ public class ModGui extends GuiScreen {
 	}
 	
 	private void addPoint( EntityPlayer p ) {
-		pointSelected += 1;
+		
+		CameraPoint newPoint = new CameraPoint(p.posX, p.posY, p.posZ, p.rotationPitch, p.rotationYaw);
+		
 		if ( Camera.getSize() == 0 ) {
 			this.pointSelected = 0;
 		}
-		Camera.addPointAtPosition(new CameraPoint(p.posX, p.posY, p.posZ, p.rotationPitch, p.rotationYaw), pointSelected);
+		else {
+			pointSelected += 1;
+		}
+		
+		// Add the point after the selected point
+		Camera.addPointAtPosition(newPoint, pointSelected);
+		
 		updatePoints();
 		activeScreen.setElements(pointList.getVisibleElements());
 		this.pointList.selectElement(pointSelected, MENU_BUTTON_BACKGROUND, MENU_BUTTON_SELECTED);

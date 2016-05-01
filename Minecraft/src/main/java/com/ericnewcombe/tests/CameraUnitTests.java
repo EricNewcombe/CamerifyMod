@@ -32,9 +32,9 @@ public class CameraUnitTests {
 		assertEquals( 4, Camera.getSize() );
 		
 		// Test removing points
-		assertFalse( Camera.removePoint(5) );
+		Camera.removePoint(5);
 		assertEquals( 4, Camera.getSize() );
-		assertTrue( Camera.removePoint(2) );
+		Camera.removePoint(2);
 		assertEquals( Camera.getSize(), 3 );
 		
 		// Test adding point at position

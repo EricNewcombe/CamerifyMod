@@ -4,20 +4,20 @@ import java.util.ArrayList;
 
 import com.ericnewcombe.camerify.chat.ChatHandler;
 
-/*
- * Camera object which store points of which the user has input to be placed onto the path for the camera to follow
- * Camera will also calculate the point it will be at on the path based on the time elapsed
+/**
+ * Object used to manage a collection of camera points representing a path in which the camera is to follow
+ * 
+ * @author Eric
  */
-
 public class Camera {
 	
 	private static Camera instance = getInstance();
 	
 	private static ArrayList<CameraPoint> path;
 	
+	// Private initializer for singleton pattern
 	private Camera() {
 		path = new ArrayList<CameraPoint>();
-		
 	}
 	
 	public static Camera getInstance() {
@@ -29,23 +29,37 @@ public class Camera {
 		return instance;
 	}
 	
-	
+	/**
+	 *  Clears the camera path of points
+	 * @return status of the clearing of the path
+	 */
 	public static boolean clearPath() {
 		path.clear();
 		ChatHandler.sendMessage("Camera cleared.");
 		return true; // TODO add logic to determine if the path can be cleared or not
 	}
 	
+	/**
+	 * Adds a point on the path at the end of the list
+	 * @param c - Camera point which is to be added
+	 * @return - Whether the point was added successfully or not
+	 */
 	public static boolean addPoint( CameraPoint c ) {
 		path.add(c);
 		ChatHandler.sendMessage("Point Registered. " + path.size() + " in queue.");
 		return true; // TODO add logic to determine if a point is valid or not
 	}
 	
+	/**
+	 *  Adds a point on the path at a specific position as long as it is within the bounds of the current path size
+	 * @param c - Camera point which is to be added
+	 * @param pos - Position of where the point should be added
+	 * @return - Whether the point was added successfully at that position or not
+	 */
 	public static boolean addPointAtPosition( CameraPoint c, int pos ) {
 		
 		// Check to see if the intended position is in the scope of the number of points in the path already
-		if ( pos > path.size() - 1 || pos < 0 ) {
+		if ( pos > path.size() || pos < 0 ) {
 			ChatHandler.sendMessage("Position out of scope of placed points.");
 			return false;
 		}
@@ -58,6 +72,13 @@ public class Camera {
 		return true; // TODO add logic to return false if out of bounds
 	}
 	
+	/**
+	 * Sets the point at the position to the camera point provided so long as it is within the bounds of the current path size
+	 * @param c - New camera point to replace the old one
+	 * @param pos - the position at which the new camerapoint should overwrite
+	 * @return - Whether the point was successfully overridden or not
+	 */
+	
 	public static boolean setPointAtPosition( CameraPoint c, int pos ) {
 		
 		if ( pos > path.size() - 1 || pos < 0 ) { return false; }
@@ -65,6 +86,10 @@ public class Camera {
 		return true;
 		
 	}
+	
+	/**
+	 * Prints out all points to the console
+	 */
 	
 	public static void printPath() {
 		
@@ -74,7 +99,10 @@ public class Camera {
 		
 	}
 	
-	
+	/**
+	 * Creates a string representation of all points and stores it in an array
+	 * @return - An array of the string representations of each point
+	 */
 	
 	public static String[] getPathString() {
 		
@@ -88,14 +116,20 @@ public class Camera {
 		
 	}
 	
+	/**
+	 * Removes a point at a given point
+	 * @param i - index of the point to be removed
+	 * @return - The point which was removed
+	 */
+	public static CameraPoint removePoint( int i ) { 
+		if ( i > path.size() - 1 || i < 0 ) { return null; }
+		return path.remove(i);
+	}
+	
 	public static int getSize() { return path.size(); }
 	public static CameraPoint getPoint( int i ) { return path.get(i); }
 	public static String getPointString (int i ) { return path.get(i).toString(); }
 	public static ArrayList<CameraPoint> getPath() { return path; }
 	
-	public static boolean removePoint( int i ) { 
-		if ( i > path.size() - 1 || i < 0 ) { return false; }
-		path.remove(i);
-		return true;
-	}
+	
 }

@@ -1,0 +1,11 @@
+{
+  "modListVersion": 2,
+  "modList": [{
+    "modid": "camerify",
+    "name": "Camerify Mod",
+    "description": "Open sourced minecraft mod to smoothly travel through a path for video recording",
+    "version": "0.0.1",
+    "url": "",
+    "authorList": [ "dukenewcombe" ]
+  }]
+}
