@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.ericnewcombe.camerify.chat.ChatHandler;
 
 /**
- * Object used to manage a collection of camera points representing a path in which the camera is to follow
+ * Object used to manage a collection of {@link CameraPoint}s representing a path in which the camera is to follow
  * 
  * @author Eric
  */
@@ -30,7 +30,7 @@ public class Camera {
 	}
 	
 	/**
-	 *  Clears the camera path of points
+	 * Clears the camera path of points
 	 * @return status of the clearing of the path
 	 */
 	public static boolean clearPath() {
@@ -40,9 +40,9 @@ public class Camera {
 	}
 	
 	/**
-	 * Adds a point on the path at the end of the list
-	 * @param c - Camera point which is to be added
-	 * @return - Whether the point was added successfully or not
+	 * Adds a {@link CameraPoint} on the path at the end of {@link #path}
+	 * @param c {@link CameraPoint} which is to be added
+	 * @return Whether the point was added successfully or not
 	 */
 	public static boolean addPoint( CameraPoint c ) {
 		path.add(c);
@@ -51,10 +51,10 @@ public class Camera {
 	}
 	
 	/**
-	 *  Adds a point on the path at a specific position as long as it is within the bounds of the current path size
-	 * @param c - Camera point which is to be added
-	 * @param pos - Position of where the point should be added
-	 * @return - Whether the point was added successfully at that position or not
+	 *  Adds a {@link CameraPoint} on the path at a specific position as long as it is within the bounds of {@link #path}'s size
+	 * @param c {@link CameraPoint} which is to be added
+	 * @param pos Position of where the point should be added
+	 * @return Whether the point was added successfully at that position or not
 	 */
 	public static boolean addPointAtPosition( CameraPoint c, int pos ) {
 		
@@ -73,10 +73,10 @@ public class Camera {
 	}
 	
 	/**
-	 * Sets the point at the position to the camera point provided so long as it is within the bounds of the current path size
-	 * @param c - New camera point to replace the old one
-	 * @param pos - the position at which the new camerapoint should overwrite
-	 * @return - Whether the point was successfully overridden or not
+	 * Sets the {@link CameraPoint} at the position to the {@link CameraPoint} provided so long as it is within the bounds of the {@link #path}'s size
+	 * @param c New camera point to replace the old one
+	 * @param pos the position at which the new camerapoint should overwrite
+	 * @return Whether the point was successfully overridden or not
 	 */
 	
 	public static boolean setPointAtPosition( CameraPoint c, int pos ) {
@@ -88,7 +88,7 @@ public class Camera {
 	}
 	
 	/**
-	 * Prints out all points to the console
+	 * Prints out all {@link CameraPoint}s to the console
 	 */
 	
 	public static void printPath() {
@@ -100,8 +100,8 @@ public class Camera {
 	}
 	
 	/**
-	 * Creates a string representation of all points and stores it in an array
-	 * @return - An array of the string representations of each point
+	 * Creates a string representation of all {@link CameraPoint}s and stores it in an array
+	 * @return An array of the string representations of each point
 	 */
 	
 	public static String[] getPathString() {
@@ -117,9 +117,9 @@ public class Camera {
 	}
 	
 	/**
-	 * Removes a point at a given point
-	 * @param i - index of the point to be removed
-	 * @return - The point which was removed
+	 * Removes a {@link CameraPoint} at a given index
+	 * @param i index of the point to be removed
+	 * @return The {@link CameraPoint} which was removed
 	 */
 	public static CameraPoint removePoint( int i ) { 
 		if ( i > path.size() - 1 || i < 0 ) { return null; }

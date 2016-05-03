@@ -1,14 +1,14 @@
 package com.ericnewcombe.camerify.camera.gui;
 
+/**
+ * 
+ * Base class for elements of the GUI menu to build off of. Holds the basic information in order for it to be displayed on the screen
+ * 
+ * @author Eric
+ * 
+ */
+
 public class MenuElement {
-	
-	/**
-	 * 
-	 * Base class for elements of the GUI menu to build off of. Holds the basic information in order for it to be displayed on the screen
-	 * 
-	 * @author Eric
-	 * 
-	 */
 	
 	protected int posX, posY, width, height, defaultColor, currentColor, hoverColor, id;
 	protected static int xOffset, yOffset;

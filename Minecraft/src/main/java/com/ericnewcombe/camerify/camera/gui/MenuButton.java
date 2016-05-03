@@ -1,15 +1,16 @@
 package com.ericnewcombe.camerify.camera.gui;
 
+
+/**
+ * 
+ * Clickable element of the menu with an id assigned to it
+ * to perform different actions in the main program
+ * 
+ * @author Eric
+ */
+
 public class MenuButton extends MenuElement {
 
-	/**
-	 * 
-	 * Clickable element of the menu with an id assigned to it
-	 * to perform different actions in the main program
-	 * 
-	 * @author Eric
-	 */
-	
 	protected int id;
 	
 	public MenuButton ( int id, int posX, int posY, int width, int height, int color, int hoverColor, String text, String hoverText ) {
@@ -33,6 +34,10 @@ public class MenuButton extends MenuElement {
 				&& mouseY >= posY + yOffset && mouseY <= posY + yOffset + height; 
 	}
 	
+	/**
+	 * @return {@link #id}
+	 */
+	@Override
 	public int getId() { return this.id; }
 	
 }
