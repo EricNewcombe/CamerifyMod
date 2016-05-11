@@ -10,9 +10,66 @@ package com.ericnewcombe.camerify.camera.gui;
 
 public class MenuElement {
 	
-	protected int posX, posY, width, height, defaultColor, currentColor, hoverColor, id;
-	protected static int xOffset, yOffset;
-	protected String text, hoverText;
+	/**
+	 * x position of the screen of the element
+	 */
+	
+	protected int posX;
+	
+	/**
+	 * y position on the screen of the element
+	 */
+	protected int posY;
+	
+	/**
+	 * Width in pixels of the element
+	 */
+	protected int width;
+	
+	/**
+	 * Height in pixels of the element
+	 */
+	protected int height;
+	
+	/**
+	 * Base colour of the element which will be used to revert it back to its original state
+	 */
+	protected int defaultColor;
+	
+	/**
+	 * The current colour of the element, used for displaying on a {@link Screen}
+	 */
+	protected int currentColor;
+	
+	/**
+	 * The colour that the element turns when it is hovered over
+	 */
+	protected int hoverColor;
+	
+	//TODO create better description
+	/**
+	 * The x offset of the screen
+	 */
+	protected static int xOffset;
+	
+	/**
+	 * The y offset of the screen
+	 */
+	protected static int yOffset;
+	
+	/**
+	 * Text to be displayed within the element
+	 */
+	protected String text;
+	
+	/**
+	 * Text to be displayed on a {@link Screen} when the {@link MenuElement} is hovered over
+	 */
+	protected String hoverText;
+	
+	/**
+	 * Whether the data is to be displayed on a {@link Screen}
+	 */
 	protected boolean visible;
 	
 	// TODO change how the background colour and hover colours are stored
@@ -69,11 +126,11 @@ public class MenuElement {
 	}
 	
 	public int getCenterX() { 
-		return this.posX + this.xOffset + this.width / 2;  
+		return this.posX + MenuElement.xOffset + this.width / 2;  
 	}
 	
 	public int getCenterY() { 
-		return this.posY + this.yOffset + this.height / 2; 
+		return this.posY + MenuElement.yOffset + this.height / 2; 
 	}
 	
 	public int getWidth() { 
