@@ -10,19 +10,13 @@ import java.util.ArrayList;
  */
 public class Screen {
 	
-	/**
-	 * The parent screen of this screen
-	 */
+	/** The parent screen of this screen */
 	public Screen parent;
 	
-	/**
-	 * collection of subscreens of this screen
-	 */
+	/** collection of subscreens of this screen */
 	private ArrayList<Screen> subScreens;
 	
-	/**
-	 * Collection of all of the screenelements to be displayed on this screen
-	 */
+	/**  Collection of all of the screenelements to be displayed on this screen */
 	private ArrayList<MenuElement> screenElements;
 	
 	public Screen(){

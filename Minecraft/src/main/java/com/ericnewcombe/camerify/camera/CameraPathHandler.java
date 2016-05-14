@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.ericnewcombe.camerify.chat.ChatHandler;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.Vec3d;
 
 public class CameraPathHandler {
@@ -161,10 +162,32 @@ public class CameraPathHandler {
 		
 		return pos;
 	}
+	
+	/**
+	 * Linearly calculates the position of the head based on the point in the path
+	 * @param pointPositioninPath the point position in the path
+	 * @return an array with the pitch and yaw in it
+	 */
 
-	private static float[] calculateHeadDirectionOnPath ( double pointPositioninPath ) {
+	public static float[] calculateHeadDirectionOnPath ( double pointPositioninPath ) {
+		
+		pointPositioninPath = Math.ceil(pointPositioninPath * 1000) / 1000;
+		
+		float pitch = 0, yaw = 0;
+		
+		int startPoint = (int) Math.floor(pointPositioninPath);
+		
+		if ( startPoint >= path.size() - 2 ) { startPoint = path.size() - 2; }
+		
 		// TODO write the pitch, yaw transition logic here
-		return new float[2];
+		
+		pitch = (float) (path.get(startPoint).camPitch * ( 1 - ( pointPositioninPath - startPoint ) ) + path.get(startPoint + 1).camPitch * ( pointPositioninPath - startPoint ) );
+		yaw = (float) (path.get(startPoint).camYaw * ( 1 - ( pointPositioninPath - startPoint ) ) + path.get(startPoint + 1).camYaw * ( pointPositioninPath - startPoint ) );
+		
+		float[] view = {pitch, yaw};
+		
+		return view;
+		
 	}
 	
 	/**
@@ -175,7 +198,15 @@ public class CameraPathHandler {
 		// TODO write the logic to update camera at every tick
 		if ( moving ) {
 			if ( Camera.getSize() > 1 ) {
+				// The current frame is representative of how many ticks have passed. The travel time divided by number of points is the
+				// number of milliseconds of travel in between points. Dividing the current frame by the number of milliseconds between each point
+				// gives the number of points that have fully been travelled and how far in between points is left
+				double pointsTravelled = currentFrame / ( travelTime / path.size() );
 				
+				if ( (int) pointsTravelled > path.size() ) { endTravel(); }
+				
+				Vec3d pos = calculatePositionInPath(pointsTravelled);
+				float[] view = calculateHeadDirectionOnPath(pointsTravelled);
 			}
 		}
 	}
@@ -190,7 +221,7 @@ public class CameraPathHandler {
 	
 	/** updates the Camera path to the most recent points */
 
-	private static void updatePoints() {
+	public static void updatePoints() {
 		path = Camera.getPath();
 	}
 }

@@ -11,9 +11,7 @@ package com.ericnewcombe.camerify.camera.gui;
 
 public class MenuButton extends MenuElement {
 
-	/**
-	 * Id of the button created
-	 */
+	/**  Id of the button created  */
 	protected int id;
 	
 	public MenuButton ( int id, int posX, int posY, int width, int height, int color, int hoverColor, String text, String hoverText ) {

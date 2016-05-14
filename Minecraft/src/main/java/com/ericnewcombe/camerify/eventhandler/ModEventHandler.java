@@ -46,6 +46,7 @@ private boolean[] pressed = new boolean[ClientProxy.keyBindings.length];
 	
 	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
 	public void onEvent(ServerTickEvent e) {
+		// If the camera is traversing the path it will update every time that the server ticks
 		CameraPathHandler.tick();
 	}
 }

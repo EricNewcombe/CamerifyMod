@@ -11,24 +11,16 @@ import java.util.ArrayList;
 
 public class ScrollList {
 	
-	/**
-	 * The amount that the list has been scrolled
-	 */
+	/** The amount that the list has been scrolled */
 	protected int amountScrolled;
 	
-	/**
-	 * The number of elements to be displayed on the creating of the list
-	 */
+	/** The number of elements to be displayed on the creating of the list */
 	protected int numVisible;
 	
-	/**
-	 * The number of pixels to put in between elements
-	 */
+	/** The number of pixels to put in between elements */
 	protected int scrollSpacing;
 	
-	/**
-	 * Holds all the elements which will be displayed in the list
-	 */
+	/** Holds all the elements which will be displayed in the list */
 	protected ArrayList<MenuElement> elements;
 	
 	public ScrollList( ArrayList<MenuElement> elements, int numVisible, int scrollSpacing ) {

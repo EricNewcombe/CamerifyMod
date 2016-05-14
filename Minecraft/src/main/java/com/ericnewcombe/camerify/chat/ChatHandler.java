@@ -4,9 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextComponentString;
 
 
-/*
- * Simple helper class to display messages to the user
- */
+/** Simple helper class to display messages to the user */
 
 public class ChatHandler {
 	

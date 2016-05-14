@@ -79,6 +79,8 @@ public class CameraUnitTests {
 		Camera.addPoint(c);
 		Camera.addPoint(d);
 		
+		CameraPathHandler.updatePoints();
+		
 		// Test converting point to Vec3D
 		
 		Vec3d vecA = CameraPathHandler.generateVecFromPoint(a);
@@ -95,6 +97,24 @@ public class CameraUnitTests {
 		assertEquals(CameraPathHandler.calculateLinearPosition(0.5).xCoord, 75, 0);
 		assertEquals(CameraPathHandler.calculateLinearPosition(0.75).xCoord, 87.5, 0);
 		assertEquals(CameraPathHandler.calculateLinearPosition(0.25).xCoord, 62.5, 0);
+		
+		// Head position
+		
+		assertEquals(CameraPathHandler.calculateHeadDirectionOnPath(0)[0], a.camPitch, 0 );
+		assertEquals(CameraPathHandler.calculateHeadDirectionOnPath(0.5)[0], 35, 0 );
+		assertEquals(CameraPathHandler.calculateHeadDirectionOnPath(1)[0], b.camPitch, 0 );
+		assertEquals(CameraPathHandler.calculateHeadDirectionOnPath(1.5)[0], 45, 0 );
+		assertEquals(CameraPathHandler.calculateHeadDirectionOnPath(2)[0], c.camPitch, 0 );
+		assertEquals(CameraPathHandler.calculateHeadDirectionOnPath(2.5)[0], 40, 0 );
+		assertEquals(CameraPathHandler.calculateHeadDirectionOnPath(3)[0], d.camPitch, 0 );
+		
+		assertEquals(CameraPathHandler.calculateHeadDirectionOnPath(0)[1], a.camYaw, 0 );
+		assertEquals(CameraPathHandler.calculateHeadDirectionOnPath(0.5)[1], 45, 0 );
+		assertEquals(CameraPathHandler.calculateHeadDirectionOnPath(1)[1], b.camYaw, 0 );
+		assertEquals(CameraPathHandler.calculateHeadDirectionOnPath(1.5)[1], 70, 0 );
+		assertEquals(CameraPathHandler.calculateHeadDirectionOnPath(2)[1], c.camYaw, 0 );
+		assertEquals(CameraPathHandler.calculateHeadDirectionOnPath(2.5)[1], 65, 0 );
+		assertEquals(CameraPathHandler.calculateHeadDirectionOnPath(3)[1], d.camYaw, 0 );
 		
 		
 		

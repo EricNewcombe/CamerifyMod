@@ -10,66 +10,42 @@ package com.ericnewcombe.camerify.camera.gui;
 
 public class MenuElement {
 	
-	/**
-	 * x position of the screen of the element
-	 */
+	/** x position of the screen of the element */
 	
 	protected int posX;
 	
-	/**
-	 * y position on the screen of the element
-	 */
+	/**  y position on the screen of the element */
 	protected int posY;
 	
-	/**
-	 * Width in pixels of the element
-	 */
+	/**  Width in pixels of the element */
 	protected int width;
 	
-	/**
-	 * Height in pixels of the element
-	 */
+	/** Height in pixels of the element */
 	protected int height;
 	
-	/**
-	 * Base colour of the element which will be used to revert it back to its original state
-	 */
+	/** Base colour of the element which will be used to revert it back to its original state */
 	protected int defaultColor;
 	
-	/**
-	 * The current colour of the element, used for displaying on a {@link Screen}
-	 */
+	/** The current colour of the element, used for displaying on a {@link Screen} */
 	protected int currentColor;
 	
-	/**
-	 * The colour that the element turns when it is hovered over
-	 */
+	/** The colour that the element turns when it is hovered over */
 	protected int hoverColor;
 	
 	//TODO create better description
-	/**
-	 * The x offset of the screen
-	 */
+	/** The x offset of the screen */
 	protected static int xOffset;
 	
-	/**
-	 * The y offset of the screen
-	 */
+	/** The y offset of the screen */
 	protected static int yOffset;
 	
-	/**
-	 * Text to be displayed within the element
-	 */
+	/** Text to be displayed within the element */
 	protected String text;
 	
-	/**
-	 * Text to be displayed on a {@link Screen} when the {@link MenuElement} is hovered over
-	 */
+	/** Text to be displayed on a {@link Screen} when the {@link MenuElement} is hovered over */
 	protected String hoverText;
 	
-	/**
-	 * Whether the data is to be displayed on a {@link Screen}
-	 */
+	/** Whether the data is to be displayed on a {@link Screen} */
 	protected boolean visible;
 	
 	// TODO change how the background colour and hover colours are stored
