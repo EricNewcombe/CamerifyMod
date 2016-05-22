@@ -89,15 +89,6 @@ public class CameraUnitTests {
 		assertEquals(vecA.zCoord, a.z, 0);
 		
 		
-		
-		// Linear Path
-		
-		assertEquals(CameraPathHandler.calculateLinearPosition(0).xCoord, a.x, 0);
-		assertEquals(CameraPathHandler.calculateLinearPosition(1).xCoord, b.x, 0);
-		assertEquals(CameraPathHandler.calculateLinearPosition(0.5).xCoord, 75, 0);
-		assertEquals(CameraPathHandler.calculateLinearPosition(0.75).xCoord, 87.5, 0);
-		assertEquals(CameraPathHandler.calculateLinearPosition(0.25).xCoord, 62.5, 0);
-		
 		// Head position
 		
 		assertEquals(CameraPathHandler.calculateHeadDirectionOnPath(0)[0], a.camPitch, 0 );

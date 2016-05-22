@@ -1,6 +1,9 @@
 package com.ericnewcombe.camerify.camera;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import com.ericnewcombe.camerify.chat.ChatHandler;
 
@@ -36,7 +39,18 @@ public class CameraPathHandler {
 			return false;
 		}
 		if ( !moving ) {
-			ChatHandler.sendMessage("Travelling started!");
+			
+			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+			Calendar cal = Calendar.getInstance();
+			
+			Vec3d startingPosition = generateVecFromPoint( path.get(0) );
+			float[] startingAngles = calculateHeadDirectionOnPath(0);
+			
+			setPlayerPositionAndAngles(startingPosition, startingAngles);
+			
+			
+			ChatHandler.sendMessage("Travelling started! " + dateFormat.format(cal.getTime()));
+			
 			moving = true;
 			currentFrame = 0;
 			return true;
@@ -51,22 +65,79 @@ public class CameraPathHandler {
 
 	public static boolean endTravel() {
 		if ( moving ) {
-			ChatHandler.sendMessage("Travelling ended.");
+			
+			DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+			Calendar cal = Calendar.getInstance();
+			
+			ChatHandler.sendMessage("Travelling ended. " + dateFormat.format(cal.getTime()));
+			
 			moving = false;
 			return true; // Success
 		}
 		return false; // Not moving
 	}
 	
-	private static Vec3d calculatePositionInPath ( double pointPositionInPath) {
+	private static Vec3d calculateMovementVector( double pointPositionInPath ) {
 		
-		if ( Camera.getSize() == 1 ) { return generateVecFromPoint (path.get(0)); }
-		if ( Camera.getSize() == 2 ) { return calculateLinearPosition( pointPositionInPath ); }
-		if ( Camera.getSize() == 3 ) { return calculateQuadraticPosition ( pointPositionInPath ); }
-		else { return calculateSplinePosition ( pointPositionInPath ); }
-		
+		switch ( Camera.getSize() ) {
+			case 1:
+				return generateVecFromPoint( path.get(0) );
+				// TODO add other options
+			default:
+				return calculateLinearMovementVector ( pointPositionInPath );
+		}
 	}
-
+	
+	/**
+	 * Calculates the movement vector that will bring the player to the next point in the path
+	 * @param pointPositionInPath Number of points and how far in between two current points the player is
+	 * @return {@link Vec3d} representation of the amount the player has to move
+	 */
+	
+	public static Vec3d calculateLinearMovementVector ( double pointPositionInPath ) {
+		Vec3d movementVector;
+		
+		double xChange = 0,
+			   yChange = 0,
+			   zChange = 0;
+		
+		int start = (int) pointPositionInPath;
+		if ( start >= path.size() - 2 ) { start = path.size() - 2; }
+		
+		double timeBetweenPoints = travelTime / path.size();
+		
+		xChange = ( path.get(start + 1).x - path.get(start).x ) / timeBetweenPoints;
+		yChange = ( path.get(start + 1).y - path.get(start).y ) / timeBetweenPoints;
+		zChange = ( path.get(start + 1).z - path.get(start).z ) / timeBetweenPoints;
+		
+		movementVector = new Vec3d(xChange, yChange, zChange );
+		
+		return movementVector;
+	}
+	
+	public static Vec3d calculateQuadraticMovementVector ( double pointPositionInPath ) {
+		Vec3d movementVector;
+		
+		double xChange = 0,
+			   yChange = 0,
+			   zChange = 0;
+		
+		movementVector = new Vec3d(xChange, yChange, zChange );
+		
+		return movementVector;
+	}
+	
+	public static Vec3d calculateSplineMovementVector ( double pointPositionInPath ) {
+		Vec3d movementVector;
+		
+		double xChange = 0,
+			   yChange = 0,
+			   zChange = 0;
+		
+		movementVector = new Vec3d(xChange, yChange, zChange );
+		
+		return movementVector;
+	}
 	/**
 	 * Creates a {@link Vec3d} representation of a {@link CameraPoint}
 	 * @param p {@link CameraPoint} to be represented
@@ -74,93 +145,6 @@ public class CameraPathHandler {
 	 */
 	public static Vec3d generateVecFromPoint(CameraPoint p) {
 		return new Vec3d(p.x, p.y, p.z);
-	}
-	
-	public static Vec3d calculateSplinePosition(double pointPositionInPath) {
-		
-		Vec3d pos;
-		
-		pointPositionInPath = Math.ceil( pointPositionInPath * 1000 ) / 1000;
-		ArrayList <CameraPoint> path = Camera.getPath();
-		
-		// For debugging purposes
-		ChatHandler.sendMessage(String.valueOf(pointPositionInPath));
-		
-		double x = 0,
-			   y = 0,
-			   z = 0;
-		
-		int startPoint = (int) Math.floor(pointPositionInPath);
-		
-		
-		if ( startPoint >= Camera.getSize() - 4 ) { startPoint = Camera.getSize() - 4; }
-		
-		// TODO write travelling logic here
-		
-		
-		pos = new Vec3d(x, y, z);
-		
-		return pos;
-	}
-
-	public static Vec3d calculateQuadraticPosition(double pointPositionInPath) {
-		Vec3d pos;
-		
-		pointPositionInPath = Math.ceil( pointPositionInPath * 1000 ) / 1000;
-		ArrayList <CameraPoint> path = Camera.getPath();
-		
-		// For debugging purposes
-		ChatHandler.sendMessage(String.valueOf(pointPositionInPath));
-		
-		double x = 0,
-			   y = 0,
-			   z = 0;
-		
-		int startPoint = (int) Math.floor(pointPositionInPath);
-		
-		
-		if ( startPoint >= Camera.getSize() - 4 ) { startPoint = Camera.getSize() - 4; }
-		
-		// TODO write travelling logic here
-		
-		
-		pos = new Vec3d(x, y, z);
-		
-		return pos;
-	}
-
-	/**
-	 * Calculates the position between two points in a linear way
-	 * @param pointPositionInPath double between 0 and 1 representing the percentage completed between two points
-	 * @return {@link Vec3d} point of where the player should be at the particular point in the path
-	 */
-	public static Vec3d calculateLinearPosition(double pointPositionInPath) {
-		Vec3d pos;
-		
-		pointPositionInPath = Math.ceil( pointPositionInPath * 1000 ) / 1000;
-		ArrayList <CameraPoint> path = Camera.getPath();
-		
-		// For debugging purposes
-		ChatHandler.sendMessage(String.valueOf(pointPositionInPath));
-		
-		double x = 0,
-			   y = 0,
-			   z = 0;
-		
-		int startPoint = (int) Math.floor(pointPositionInPath);
-		
-		// TODO write travelling logic here
-		
-		// If it is at the beginning or the end of the path just return that point, else set the values as a combination of the two points
-		// based on the amount between the two points has been travelled
-		
-		x = path.get(0).x * ( 1 - pointPositionInPath ) + path.get(1).x * pointPositionInPath;
-		y = path.get(0).y * ( 1 - pointPositionInPath ) + path.get(1).y * pointPositionInPath;
-		z = path.get(0).z * ( 1 - pointPositionInPath ) + path.get(1).z * pointPositionInPath;
-		
-		pos = new Vec3d(x, y, z);
-		
-		return pos;
 	}
 	
 	/**
@@ -181,8 +165,10 @@ public class CameraPathHandler {
 		
 		// TODO write the pitch, yaw transition logic here
 		
-		pitch = (float) (path.get(startPoint).camPitch * ( 1 - ( pointPositioninPath - startPoint ) ) + path.get(startPoint + 1).camPitch * ( pointPositioninPath - startPoint ) );
-		yaw = (float) (path.get(startPoint).camYaw * ( 1 - ( pointPositioninPath - startPoint ) ) + path.get(startPoint + 1).camYaw * ( pointPositioninPath - startPoint ) );
+		double percentCompletedBetweenTwoPoints = pointPositioninPath - startPoint;
+		
+		pitch = (float) (path.get(startPoint).camPitch * ( 1 - percentCompletedBetweenTwoPoints ) + path.get(startPoint + 1).camPitch * percentCompletedBetweenTwoPoints );
+		yaw = (float) (path.get(startPoint).camYaw * ( 1 - percentCompletedBetweenTwoPoints ) + path.get(startPoint + 1).camYaw * percentCompletedBetweenTwoPoints );
 		
 		float[] view = {pitch, yaw};
 		
@@ -196,27 +182,55 @@ public class CameraPathHandler {
 	 */
 	public static void tick() {
 		// TODO write the logic to update camera at every tick
+		
 		if ( moving ) {
-			if ( Camera.getSize() > 1 ) {
-				// The current frame is representative of how many ticks have passed. The travel time divided by number of points is the
-				// number of milliseconds of travel in between points. Dividing the current frame by the number of milliseconds between each point
-				// gives the number of points that have fully been travelled and how far in between points is left
-				double pointsTravelled = currentFrame / ( travelTime / path.size() );
-				
-				if ( (int) pointsTravelled > path.size() ) { endTravel(); }
-				
-				Vec3d pos = calculatePositionInPath(pointsTravelled);
-				float[] view = calculateHeadDirectionOnPath(pointsTravelled);
-			}
+			
+			// The current frame is representative of how many ticks have passed. The travel time divided by number of points is the
+			// number of milliseconds of travel in between points. Dividing the current frame by the number of milliseconds between each point
+			// gives the number of points that have fully been travelled and how far in between points is left
+			double pointsTravelled = (double) currentFrame / ( travelTime / path.size() - 1 );
+			
+			pointsTravelled = Math.ceil( pointsTravelled * 1000 ) / 1000;
+			
+			if ( pointsTravelled > path.size() - 1 ) { endTravel(); return; }
+			
+			float[] view = calculateHeadDirectionOnPath(pointsTravelled);
+			
+			Vec3d movementVector = calculateMovementVector(pointsTravelled);
+			float[] playerView = calculateHeadDirectionOnPath(pointsTravelled);
+			
+			movePlayer(movementVector);
+			setPlayerAngles(playerView);
+			
+			
+			currentFrame++;
 		}
 	}
 	
+	private static void setPlayerPositionFromVector( Vec3d pos ) {
+		Minecraft.getMinecraft().thePlayer.setPosition(pos.xCoord, pos.yCoord, pos.zCoord);
+	}
+	
+	private static void setPlayerPositionAndAngles ( Vec3d pos, float[] view ) {
+		Minecraft.getMinecraft().thePlayer.setPositionAndRotation(pos.xCoord, pos.yCoord, pos.zCoord, view[1], view[0]);
+	}
+	
+	private static void movePlayer(Vec3d movementVector) {
+		Minecraft.getMinecraft().thePlayer.moveEntity(movementVector.xCoord, movementVector.yCoord, movementVector.zCoord);
+	}
+	
+	private static void setPlayerAngles( float[] angles ) {
+		Minecraft.getMinecraft().thePlayer.setAngles(angles[1], angles[0]);
+	}
+	
 	/**
-	 * sets the time that it will take to traverse the path in milliseconds
-	 * @param milliseconds Number of milliseconds that it will take to traverse the path
+	 * sets the time that it will take to traverse the path in seconds
+	 * @param seconds Number of seconds that it will take to traverse the path
 	 */
-	public static void setTravelTime( int milliseconds ) {
-		travelTime = milliseconds;
+	public static void setTravelTime( int seconds ) {
+		
+		//TODO find accurate way to set number of ticks per second
+		travelTime = seconds * 160;
 	}
 	
 	/** updates the Camera path to the most recent points */

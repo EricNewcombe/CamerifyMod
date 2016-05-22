@@ -18,7 +18,7 @@ public class Main {
 
 	public static final String MODID = "Camerify";
 	public static final String MODNAME = "Camerify Mod";
-	public static final String VERSION = "0.0.1";
+	public static final String VERSION = "1.9.0-1.0.0";
 	
 	@Instance
 	public static Main instance = new Main();
